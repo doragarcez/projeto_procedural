@@ -4,6 +4,8 @@
 #define MAX_PRODUTOS 100
 #define ESTOQUE_MINIMO 5
 
+
+/* Função dedicada a exibir o menu de opções do sistema de estoque e capturar a escolha do usuário. */
 int menu () {
     int opcao;
     printf("===== SISTEMA DE ESTOQUE =====\n");
@@ -24,14 +26,17 @@ int menu () {
     return opcao;
 }
 
+/* Definição da estrutura Produto, que representa um produto no sistema de estoque, contendo nome, preço unitário e quantidade em estoque. */
 typedef struct {
     char nome[50];
     float preco_unitario;
     int quantidade;
 } Produto;
 
+/* Função para cadastrar um novo produto no sistema de estoque, verificando se o limite máximo de produtos foi atingido e capturando os detalhes do produto. */
 void cadastrar_produto(Produto *p, int *quantidade_produtos){
 
+    /* Crio um ponteiro para o próximo produto a ser cadastrado, utilizando o endereço do array de produtos e o índice da quantidade atual de produtos. */
     if (*quantidade_produtos >= MAX_PRODUTOS) {
         printf("Limite de produtos atingido!\n");
         return;
@@ -52,6 +57,7 @@ void cadastrar_produto(Produto *p, int *quantidade_produtos){
     (*quantidade_produtos)++;
 }
 
+/* Função para listar todos os produtos cadastrados no sistema de estoque */
 void listar_produtos(Produto *produtos, int quantidade_produtos) {
 
     printf("===== LISTA DE PRODUTOS =====\n");
@@ -61,6 +67,7 @@ void listar_produtos(Produto *produtos, int quantidade_produtos) {
         return;
     }
 
+    /* Loop para percorrer todos os produtos cadastrados e suas informações */
     for (int i = 0; i < quantidade_produtos; i++) {
         printf("Produto %d:\n", i + 1);
         printf("Nome: %s", produtos[i].nome);
@@ -70,12 +77,15 @@ void listar_produtos(Produto *produtos, int quantidade_produtos) {
     }
 }
 
+/* Função para buscar um produto pelo nome no sistema de estoque */
 void buscar_produto(Produto *produtos, int quantidade_produtos) {
     char nome_busca[50];
     printf("===== BUSCAR PRODUTO =====\n");
     printf("Digite o nome do produto: ");
     fgets(nome_busca, sizeof(nome_busca), stdin);
 
+    /* Loop que percorre todos os nomes dos produtos cadastrados e compara com o nome buscado 
+    A desvantagem é que ele não é case insensitive, ou seja, se o usuário digitar o nome do produto com letras maiúsculas ou minúsculas diferentes, a busca não funcionará corretamente. */
     for (int i = 0; i < quantidade_produtos; i++) {
         if (strcmp(produtos[i].nome, nome_busca) == 0) {
             printf("Produto encontrado:\n");
@@ -88,6 +98,7 @@ void buscar_produto(Produto *produtos, int quantidade_produtos) {
     printf("Produto nao encontrado.\n");
 }
 
+/* Função para registrar a entrada de estoque de um produto, permitindo ao usuário adicionar uma quantidade específica ao estoque existente. */
 int entrada_estoque(Produto *produtos, int quantidade_produtos) {
     char nome_busca[50];
     printf("===== ENTRADA DE ESTOQUE =====\n");
@@ -108,6 +119,7 @@ int entrada_estoque(Produto *produtos, int quantidade_produtos) {
     return 0; 
 }
 
+/* Função para registrar a saída de estoque de um produto, permitindo ao usuário remover uma quantidade específica do estoque existente, desde que haja quantidade suficiente. */
 int saida_estoque(Produto *produtos, int quantidade_produtos) {
     char nome_busca[50];
     printf("===== SAIDA DE ESTOQUE =====\n");
@@ -133,6 +145,7 @@ int saida_estoque(Produto *produtos, int quantidade_produtos) {
     return 0; 
 }
 
+/* Função para calcular e exibir o valor total do estoque, somando o valor de cada produto com base em seu preço unitário e quantidade em estoque. */
 void mostrar_valor_total_estoque(Produto *produtos, int quantidade_produtos) {
     printf("===== VALOR TOTAL DO ESTOQUE =====\n");
     if (quantidade_produtos == 0) {
@@ -148,6 +161,7 @@ void mostrar_valor_total_estoque(Produto *produtos, int quantidade_produtos) {
     printf("Valor total do estoque: %.2f\n", valor_total);
 }
 
+/* Função para exibir o produto com a maior quantidade em estoque, percorrendo todos os produtos cadastrados e comparando suas quantidades. */
 void mostrar_produto_maior_quantidade(Produto *produtos, int quantidade_produtos) {
     printf("===== PRODUTO COM MAIOR QUANTIDADE =====\n");
     if (quantidade_produtos == 0) {
@@ -165,6 +179,7 @@ void mostrar_produto_maior_quantidade(Produto *produtos, int quantidade_produtos
     printf("Quantidade em estoque: %d\n", produtos[indice_maior].quantidade);
 }
 
+/* Função para exibir o produto com a menor quantidade em estoque, percorrendo todos os produtos cadastrados e comparando suas quantidades. */
 void mostrar_produto_menor_quantidade(Produto *produtos, int quantidade_produtos) {
     printf("===== PRODUTO COM MENOR QUANTIDADE =====\n");
     if (quantidade_produtos == 0) {
@@ -182,6 +197,7 @@ void mostrar_produto_menor_quantidade(Produto *produtos, int quantidade_produtos
     printf("Quantidade em estoque: %d\n", produtos[indice_menor].quantidade);
 }
 
+/* Função para exibir o produto mais caro, percorrendo todos os produtos cadastrados e comparando seus preços unitários. */
 void mostrar_produto_mais_caro(Produto *produtos, int quantidade_produtos) {
     printf("===== PRODUTO MAIS CARO =====\n");
     if (quantidade_produtos == 0) {
@@ -199,6 +215,7 @@ void mostrar_produto_mais_caro(Produto *produtos, int quantidade_produtos) {
     printf("Preco unitario: %.2f\n", produtos[indice_mais_caro].preco_unitario);
 }
 
+/* Função para listar produtos com estoque abaixo do mínimo definido, percorrendo todos os produtos cadastrados e verificando suas quantidades. */
 void listar_produtos_estoque_baixo(Produto *produtos, int quantidade_produtos) {
     printf("===== PRODUTOS COM ESTOQUE BAIXO =====\n");
     if (quantidade_produtos == 0) {
@@ -219,6 +236,7 @@ void listar_produtos_estoque_baixo(Produto *produtos, int quantidade_produtos) {
     }
 }
 
+/* Função principal do programa, que inicializa o sistema de estoque, exibe o menu e processa as opções escolhidas pelo usuário em um loop até que ele decida sair. */
 int main() {
     Produto produtos[MAX_PRODUTOS];
     int quantidade_produtos = 0;
